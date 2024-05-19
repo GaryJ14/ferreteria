@@ -2,71 +2,104 @@
 <html lang="es">
 
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Registro2</title>
-    <link rel="stylesheet" href="styles.css">
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Registro</title>
+  <link rel="stylesheet" href="styles.css">
 </head>
 
 <body>
 
-    <section class="fondo fondo--registro">
-        <div class="capa-fondo">
+  <section class="fondo fondo--registro">
+    <div class="capa-fondo">
 
-            <main class="contenedor">
+      <main class="contenedor">
+        <div class="contenido">
 
-                <div class="contenido">
+          <h1>Crea tu cuenta</h1>
 
-                    <h1>Crea tu cuenta</h1>
+          <form class="formulario-registro" id="formulario-registro">
 
-                    <form class="formulario-registro">
+            <div class="campoIzq nombre">
+              <input class="registro__field nombre-field" type="name" placeholder="Nombre" id="nombre">
+            </div>
 
-                        <div class="campoIzq nombre">
-                            <input class="registro__field  nombre-field" type="name" placeholder="Nombre" id="name">
-                        </div>
-
-                        <div class="campoDer apellido">
-                            <input class="registro__field apellido-field" type="name" placeholder="Apellido" id="lastname">
-                        </div>
-
-
-                        <div class="campoIzq email1">
-                            <input class="registro__field email-field" type="email" placeholder="Correo Electronico" id="email">
-                        </div>
-
-                        <div class="campoDer email2">
-                            <input class="registro__field email-field" type="email" placeholder="Confirma el correo electronico" id="email">
-                        </div>
+            <div class="campoDer apellido">
+              <input class="registro__field apellido-field" type="name" placeholder="Apellido" id="apellido">
+            </div>
 
 
-                        <div class="campoIzq contraseña1">
-                            <input class="registro__field contraseña-field" type="password" placeholder="Contraseña"
-                                id="password">
-                        </div>
+            <div class="campoIzq email1">
+              <input class="registro__field email-field" type="email" placeholder="Correo Electronico" id="email">
+            </div>
 
-                        <div class="campoDer contraseña2">
-                            <input class="registro__field contraseña-field" type="password" placeholder="Confirma la contraseña"
-                                id="password">
-                        </div>
-
-                        <div class="campoIzq boton1">
-                            <a href="index.html" class="boton boton--secundario">Login</a>
-                        </div>
-
-                        <div class="campoDer boton2">
-                            <input type="submit" value="Crear Cuenta" class="boton boton--primario">
-                        </div>
-
-                    </form>
-                    
-                </div> <!-- Fin div contendio-->
-            </main><!-- Fin div main-->
-        </div><!-- Fin div capa de fondo-->
-    </section><!-- Fin fondo-->
+            <div class="campoDer email2">
+              <input class="registro__field email-field" type="email" placeholder="Confirma el correo electronico" id="email2">
+            </div>
 
 
+            <div class="campoIzq contraseña1">
+              <input class="registro__field contraseña-field" type="password" placeholder="Contraseña" id="contraseña1">
+            </div>
 
+            <div class="campoDer contraseña2">
+              <input class="registro__field contraseña-field" type="password" placeholder="Confirma la contraseña" id="contraseña2">
+            </div>
 
+            <div class="campoIzq boton1">
+              <a href="index.html" class="boton boton--secundario">Login</a>
+            </div>
+
+            <div class="campoDer boton2">
+              <input type="submit" value="Crear Cuenta" class="boton boton--primario">
+            </div>
+
+          </form>
+
+        </div>
+      </main>
+    </div>
+  </section>
+
+  <script type="module">
+    // Importar las funciones necesarias de los SDKs
+    import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-app.js";
+    import {getFirestore,collection,addDoc,onSnapshot,deleteDoc,doc} from "https://www.gstatic.com/firebasejs/10.12.0/firebase-firestore.js"
+
+    // TODO: Agregar SDKs para los productos de Firebase que se deseen usar
+    // https://firebase.google.com/docs/web/setup#available-libraries
+
+    // Configuración de Firebase para la aplicación web
+    const firebaseConfig = {
+      apiKey: "AIzaSyAMdEtGfjDp-KXkkGUBFKqq7PSum7vYZLY",
+      authDomain: "ferreteriautc.firebaseapp.com",
+      projectId: "ferreteriautc",
+      storageBucket: "ferreteriautc.appspot.com",
+      messagingSenderId: "1041591471769",
+      appId: "1:1041591471769:web:16bde3f549e04408c43208"
+    };
+
+    // Inicializar Firebase
+    const app = initializeApp(firebaseConfig);
+    const db = getFirestore(app);
+
+    const formularioRegistro = document.getElementById("formulario-registro");
+    formularioRegistro.addEventListener("submit", async (e) => {
+      // Prevenir el envío predeterminado del formulario
+      e.preventDefault();
+
+      await addDoc(collection(db, "Login"), {
+        nombre: formularioRegistro.nombre.value,
+        apellido: formularioRegistro.apellido.value,
+        email: formularioRegistro.email.value,
+        email2: formularioRegistro.email2.value,
+        contraseña: formularioRegistro.contraseña1.value,
+        contraseña2: formularioRegistro.contraseña2.value,
+      });
+
+      formularioRegistro.reset();
+    });
+  </script>
 
 
 </body>
