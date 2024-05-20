@@ -1,0 +1,139 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Registro de inventario - Ferretería El Martillo</title>
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.2.0-beta1/dist/css/bootstrap.min.css">
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+  <header class="container-fluid bg-primary text-white">
+    <div class="row">
+      <div class="col-12 text-center">
+        <h1>Registro de inventario - Ferretería El Martillo</h1>
+      </div>
+    </div>
+  </header>
+  <section class="container mt-5">
+    <h2>Agregar nuevo producto</h2>
+    <form id="registro-producto" class="row g-3">
+      <div class="col-md-6">
+        <label for="codigo" class="form-label">Código:</label>
+        <input type="number" class="form-control" id="codigo" name="codigo" required>
+      </div>
+      <div class="col-md-6">
+        <label for="producto" class="form-label">Producto:</label>
+        <input type="text" class="form-control" id="producto" name="producto" required>
+      </div>
+      <div class="col-md-12">
+        <label for="descripcion" class="form-label">Descripción:</label>
+        <textarea class="form-control" id="descripcion" name="descripcion" rows="5" required></textarea>
+      </div>
+      <div class="col-md-6">
+        <label for="precio" class="form-label">Precio:</label>
+        <input type="number" class="form-control" id="precio" name="precio" required>
+      </div>
+      <div class="col-md-6">
+        <label for="existencias" class="form-label">Existencias:</label>
+        <input type="number" class="form-control" id="existencias" name="existencias" required>
+      </div>
+      <hr>
+        <div class="col-md-4">
+            <button type="submit" class="btn btn-outline-primary">Guardar producto</button>
+        </div>
+        <div class="col-md-4">
+            <button type="submit" class="btn btn-outline-success">Editar</button>
+        </div>
+        <div class="col-md-4">
+            <button type="submit" class="btn btn-danger">Eliminar</button>
+        </div>
+
+      
+    </form>
+  </section>
+  <section class="container mt-5">
+    <h2>Inventario actual</h2>
+    <table id="tabla-inventario" class="table table-striped table-bordered">
+      <thead>
+        <tr>
+          <th>Código</th>
+          <th>Producto</th>
+          <th>Descripción</th>
+          <th>Precio</th>
+          <th>Existencias</th>
+        </tr>
+      </thead>
+      <tbody></tbody>
+    </table>
+  </section>
+
+  <script type="module">
+    // Import the functions you need from the SDKs you need
+    import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-app.js";
+    import {getFirestore,collection,addDoc,onSnapshot,deleteDoc,doc} from "https://www.gstatic.com/firebasejs/10.12.0/firebase-firestore.js"
+
+    // TODO: Add SDKs for Firebase products that you want to use
+    // https://firebase.google.com/docs/web/setup#available-libraries
+  
+    // Your web app's Firebase configuration
+    const firebaseConfig = {
+      apiKey: "AIzaSyAMdEtGfjDp-KXkkGUBFKqq7PSum7vYZLY",
+      authDomain: "ferreteriautc.firebaseapp.com",
+      projectId: "ferreteriautc",
+      storageBucket: "ferreteriautc.appspot.com",
+      messagingSenderId: "1041591471769",
+      appId: "1:1041591471769:web:16bde3f549e04408c43208"
+    };
+    
+  
+    // Initialize Firebase
+    const app = initializeApp(firebaseConfig);
+    const db = getFirestore(app);
+
+    const registroproducto = document.getElementById("registro-producto");
+    registroproducto.addEventListener("submit", async (e) => {
+      // Prevenir el envío predeterminado del formulario
+      e.preventDefault();
+
+      await addDoc(collection(db, "Inventario"), {
+        codigo: registroproducto.codigo.value,
+        producto: registroproducto.producto.value,
+        descripcion: registroproducto.descripcion.value,
+        precio: registroproducto.precio.value,
+        existencias: registroproducto.existencias.value,
+      });
+
+      registroproducto.reset();
+    });
+
+
+    //CARGAR LOS DATOS
+
+    const tablaInventario = document.getElementById("tabla-inventario").querySelector("tbody");
+
+    // Función para cargar datos del inventario desde Firestore
+    async function cargarInventario() {
+      tablaInventario.innerHTML = ""; // Limpiar la tabla antes de cargar datos
+
+      const referenciaInventario = collection(db, "Inventario");
+      const instantaneaInventario = await getDocs(referenciaInventario);
+
+      instantaneaInventario.forEach(documento => {
+        const datos = documento.data();
+        const fila = document.createElement("tr");
+        fila.innerHTML = `
+          <td>${datos.codigo}</td>
+          <td>${datos.producto}</td>
+          <td>${datos.descripcion}</td>
+          <td>$${datos.precio.toLocaleString()}</td>
+          <td>${datos.existencias}</td>
+        `;
+        tablaInventario.appendChild(fila);
+      });
+    }
+    cargarInventario();
+    </script>
+
+</body>
+</html>
