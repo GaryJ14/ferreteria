@@ -7,51 +7,84 @@
   <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.2.0-beta1/dist/css/bootstrap.min.css">
 </head>
 <body>
-  <header class="container-fluid bg-primary text-white">
+  <style>
+
+  </style>
+  <header class="container-fluid bg-black text-white">
     <div class="row">
       <div class="col-12 text-center">
         <h1>Registro de inventario - Ferretería El Martillo</h1>
-        <a href="index.html"><button id="btn-cerrar-sesion" class="btn btn-danger float-end">Cerrar sesión</button></a>
+      </div>
+      <div class="col-11 text-end">
+        <a href="index.html"><button id="btn-cerrar-sesion" class="btn btn-outline-danger float-end">Cerrar sesión</button></a>
+        <br>
+        <br>
       </div>
     </div>
   </header>
+  <br>
+  <div class="container">
+    <div class="row">
+      <div class="col-md-1 text-center">
+        <label for=""><b>BUSCAR</b></label>
+      </div>
+      <div class="col-md-7">
+        <input type="text" name="buscar" id="buscar" class="form-control" placeholder="Ingrese código">
+      </div>
+      <div class="col-md-4">
+        <button type="button" id="btn-buscar" class="btn btn-outline-success">BUSCAR</button>
+        &nbsp;&nbsp;
+        <button type="button" id="btn-limpiar" class="btn btn-outline-info">Limpiar</button> 
+  
+      </div>
+      
+  
+    </div>
   <section class="container mt-5">
     <h2>Agregar nuevo producto</h2>
     <form id="registro-producto" class="row g-3">
       <div class="col-md-6">
-        <label for="codigo" class="form-label">Código:</label>
-        <input type="number" class="form-control" id="codigo" name="codigo" required>
+        <label for=""><b>Codigo:</b> </label>
+          <input type="text" id="codigo"  class="form-control" >
       </div>
       <div class="col-md-6">
-        <label for="producto" class="form-label">Producto:</label>
-        <input type="text" class="form-control" id="producto" name="producto" required>
+        <label for=""><b>Producto: </b></label>
+        <input type="text" id="producto" class="form-control"  >
       </div>
       <div class="col-md-12">
-        <label for="descripcion" class="form-label">Descripción:</label>
-        <textarea class="form-control" id="descripcion" name="descripcion" rows="5" required></textarea>
+        <label for=""><b>Descripción:</b></label>
+        <input type="text" id="descripcion" class="form-control" >
       </div>
       <div class="col-md-6">
-        <label for="precio" class="form-label">Precio:</label>
-        <input type="number" class="form-control" id="precio" name="precio" required>
+        <label for=""><b>Precio:</b></label>
+        <input type="text" class="form-control" id="precio" >
       </div>
       <div class="col-md-6">
-        <label for="existencias" class="form-label">Existencias:</label>
-        <input type="number" class="form-control" id="existencias" name="existencias" required>
+        <label for=""><b>Existencias:</b></label>
+        <input type="number" class="form-control" id="existencias">
       </div>
       <hr>
-        <div class="col-md-4">
+        <div class="col-md-4 text-center" >
             <button type="submit" class="btn btn-outline-primary">Guardar producto</button>
         </div>
-        <div class="col-md-4">
-            <button type="submit" class="btn btn-outline-success">Editar</button>
+        <div class="col-md-4 text-center">
+          <button type="button" class="btn btn-outline-secondary" id="btn-editar">EDITAR
+  
         </div>
-        <div class="col-md-4">
-            <button type="submit" class="btn btn-danger">Eliminar</button>
+        <div class="col-md-4 text-center">
+  
+          </button> <button type="button" class="btn btn-outline-danger" id="btn-eliminar">ELIMINAR</button>
+    
         </div>
+        
 
       
     </form>
   </section>
+  <br>
+  
+     
+  </div>
   <section class="container mt-5">
     <h2>Inventario actual</h2>
     <table id="tabla-inventario" class="table table-striped table-bordered">
@@ -64,15 +97,16 @@
           <th>Existencias</th>
         </tr>
       </thead>
-      <tbody></tbody>
+      <tbody id="inventario-tbody"></tbody>
     </table>
   </section>
+  
 
   <script type="module">
     // Import the functions you need from the SDKs you need
     import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-app.js";
-    import {getFirestore,collection,addDoc,onSnapshot,deleteDoc,doc} from "https://www.gstatic.com/firebasejs/10.12.0/firebase-firestore.js"
-
+    import {getFirestore,collection,addDoc,onSnapshot,updateDoc,deleteDoc,doc,query, where,getDocs } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-firestore.js";
+        
     // TODO: Add SDKs for Firebase products that you want to use
     // https://firebase.google.com/docs/web/setup#available-libraries
   
@@ -107,33 +141,113 @@
       registroproducto.reset();
     });
 
+    
+    const inventarioTbody = document.getElementById('inventario-tbody');
+//VER LA TABLA
 
-    //CARGAR LOS DATOS
+onSnapshot(collection(db, "Inventario"), (querySnapshot) => {
+  inventarioTbody.innerHTML = '';
+  querySnapshot.forEach((doc) => {
+    const invt = doc.data();
+    const invent = document.createElement('tr');
+    invent.innerHTML = `
+      <td>${invt.codigo}</td>
+      <td>${invt.producto}</td>
+      <td>${invt.descripcion}</td>
+      <td>$${invt.precio.toLocaleString()}</td>  <td>${invt.existencias}</td>
+    `;
+    inventarioTbody.appendChild(invent);
+  });
+});
 
-    const tablaInventario = document.getElementById("tabla-inventario").querySelector("tbody");
 
-    // Función para cargar datos del inventario desde Firestore
-    async function cargarInventario() {
-      tablaInventario.innerHTML = ""; // Limpiar la tabla antes de cargar datos
+ //FUNCION EDITAR
+ const editarBtn = document.getElementById("btn-editar");
+        editarBtn.addEventListener("click", async () => {
+            const codigo = document.getElementById("codigo").value;
+            const q = query(collection(db, "Inventario"), where("codigo", "==", codigo));
+            const querySnapshot = await getDocs(q);
+            querySnapshot.forEach(async (docSnap) => {
+                const docRef = doc(db, "Inventario", docSnap.id);
+                await updateDoc(docRef, {
+                    codigo: document.getElementById("codigo").value,
+                    producto: document.getElementById("producto").value,
+                    descripcion: document.getElementById("descripcion").value,
+                    precio: document.getElementById("precio").value,
+                    existencias: document.getElementById("existencias").value,
+                });
+                inventarioTbody.reset();
+            });
+        });
 
-      const referenciaInventario = collection(db, "Inventario");
-      const instantaneaInventario = await getDocs(referenciaInventario);
 
-      instantaneaInventario.forEach(documento => {
-        const datos = documento.data();
-        const fila = document.createElement("tr");
-        fila.innerHTML = `
-          <td>${datos.codigo}</td>
-          <td>${datos.producto}</td>
-          <td>${datos.descripcion}</td>
-          <td>$${datos.precio.toLocaleString()}</td>
-          <td>${datos.existencias}</td>
-        `;
-        tablaInventario.appendChild(fila);
-      });
-    }
-    cargarInventario();
+            // Verificar si el código ya existe en la base de datos
+            async function verificarCodigoExistente(codigo) {
+                const q = query(collection(db, "Inventario"), where("codigo", "==", codigo));
+                const querySnapshot = await getDocs(q);
+                return !querySnapshot.empty;
+            }
+
+
+
+ 
+            ///FUNCION BUSCAR
+        const btnBuscar = document.getElementById("btn-buscar");
+        btnBuscar.addEventListener("click", () => {
+            const codigo = document.getElementById("buscar").value;
+            const tablaP = document.getElementById("inventario-tbody");
+            const rows = tablaP.getElementsByTagName("tr");
+            let productoEncontrado = false;
+
+            for (let i = 0; i < rows.length; i++) {
+                const cells = rows[i].getElementsByTagName("td");
+                const codigoP = cells[0].innerText;
+
+                if (codigoP === codigo) {
+                    document.getElementById("codigo").value = cells[0].innerText;
+                    document.getElementById("producto").value = cells[1].innerText;
+                    document.getElementById("descripcion").value = cells[2].innerText;
+                    document.getElementById("precio").value = cells[3].innerText;
+                    document.getElementById("existencias").value = cells[4].innerText;
+
+                    productoEncontrado = true;
+                    break;
+                }
+            }
+
+            if (!productoEncontrado) {
+                alert("No se encontró ningún producto con ese código.");
+            }
+        });
+
+            //FUNCION ELIMINAR
+            const eliminarBtn = document.getElementById("btn-eliminar");
+            eliminarBtn.addEventListener("click", async () => {
+            const codigo = document.getElementById("codigo").value;
+            const q = query(collection(db, "Inventario"), where("codigo", "==", codigo));
+            const querySnapshot = await getDocs(q);
+            querySnapshot.forEach(async (docSnap) => {
+                await deleteDoc(doc(db, "Inventario", docSnap.id));
+            });
+            inventarioTbody.reset();
+        });
+
+
+        //FUNCION LIMPIAR PANTALLA
+        const btnLimpiar = document.getElementById("btn-limpiar");
+        btnLimpiar.addEventListener("click", () => {
+            document.getElementById("codigo").value = "";
+            document.getElementById("producto").value = "";
+            document.getElementById("descripcion").value = "";
+            document.getElementById("precio").value = "";
+            document.getElementById("existencias").value = "";
+        });
+
+
+
+
+
     </script>
-
+    
 </body>
 </html>
