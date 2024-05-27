@@ -33,18 +33,12 @@
               <input class="registro__field email-field" type="email" placeholder="Correo Electronico" id="email">
             </div>
 
-            <div class="campoDer email2">
-              <input class="registro__field email-field" type="email" placeholder="Confirma el correo electronico" id="email2">
-            </div>
 
 
             <div class="campoIzq contraseña1">
               <input class="registro__field contraseña-field" type="password" placeholder="Contraseña" id="contraseña1">
             </div>
 
-            <div class="campoDer contraseña2">
-              <input class="registro__field contraseña-field" type="password" placeholder="Confirma la contraseña" id="contraseña2">
-            </div>
 
             <div class="campoIzq boton1">
               <a href="index.html" class="boton boton--secundario">Login</a>
@@ -61,15 +55,15 @@
     </div>
   </section>
 
+ 
   <script type="module">
-    // Importar las funciones necesarias de los SDKs
-    import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-app.js";
-    import {getFirestore,collection,addDoc,onSnapshot,deleteDoc,doc} from "https://www.gstatic.com/firebasejs/10.12.0/firebase-firestore.js"
-
-    // TODO: Agregar SDKs para los productos de Firebase que se deseen usar
+    // Import the functions you need from the SDKs you need
+    import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.1/firebase-app.js";
+    import { getAuth, createUserWithEmailAndPassword, signInWithEmailAndPassword, signInWithPopup, GoogleAuthProvider } from "https://www.gstatic.com/firebasejs/10.12.1/firebase-auth.js";
+    // TODO: Add SDKs for Firebase products that you want to use
     // https://firebase.google.com/docs/web/setup#available-libraries
-
-    // Configuración de Firebase para la aplicación web
+  
+    // Your web app's Firebase configuration
     const firebaseConfig = {
       apiKey: "AIzaSyAMdEtGfjDp-KXkkGUBFKqq7PSum7vYZLY",
       authDomain: "ferreteriautc.firebaseapp.com",
@@ -78,29 +72,56 @@
       messagingSenderId: "1041591471769",
       appId: "1:1041591471769:web:16bde3f549e04408c43208"
     };
-
-    // Inicializar Firebase
+  
+    // Initialize Firebase
     const app = initializeApp(firebaseConfig);
-    const db = getFirestore(app);
+    const auth = getAuth(app);
 
-    const formularioRegistro = document.getElementById("formulario-registro");
-    formularioRegistro.addEventListener("submit", async (e) => {
-      // Prevenir el envío predeterminado del formulario
-      e.preventDefault();
+    // Initialize Google Auth provider
+    const provider = new GoogleAuthProvider();
 
-      await addDoc(collection(db, "Login"), {
-        nombre: formularioRegistro.nombre.value,
-        apellido: formularioRegistro.apellido.value,
-        email: formularioRegistro.email.value,
-        email2: formularioRegistro.email2.value,
-        contraseña: formularioRegistro.contraseña1.value,
-        contraseña2: formularioRegistro.contraseña2.value,
-      });
+    document.addEventListener('DOMContentLoaded', () => {
+        const authForm = document.getElementById('formulario-registro');
+        const emailInput = document.getElementById('email');
+        const passwordInput = document.getElementById('contraseña1');
+        const registrar = document.getElementById('btn-register');
+        
+         // Registrar sesion email
+         registerButton.addEventListener('click', (e) => {
+                e.preventDefault();
+                const email = emailInput.value;
+                const contraseña = passwordInput.value;
 
-      formularioRegistro.reset();
-    });
+                createUserWithEmailAndPassword(auth, email, contraseña)
+                    .then((userCredential) => {
+                        const user = userCredential.user;
+                        console.log('Usuario registrado:', user);
+                        window.location.href = 'index.html';
+                        
+                    })
+                    .catch((error) => {
+                      console.error('Error durante el registro:', error);
+                      alert(`Error: ${error.message}`);
+                    });
+            });
+
+        // Google login functionality
+        btnGoogle.addEventListener('click', (e) => {
+            e.preventDefault();
+            signInWithPopup(auth, provider)
+                .then((result) => {
+                    const user = result.user;
+                    console.log('Usuario ingresado con Google:', user);
+                    // Redirigir a inventario.html
+                    window.location.href = 'inventario.html';
+                })
+                .catch((error) => {
+                    console.error('Error durante la autenticación con Google:', error);
+                    alert(`Error: ${error.message}`);
+                });
+        });
+        });
   </script>
-
 
 </body>
 
