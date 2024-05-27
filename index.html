@@ -26,14 +26,14 @@
 
                     <form class="formulario">
 
-                        <div class="campo1"><label class="campo__label email" for="email">E-mail</label></div>
+                        <div class="campo1"><label class="campo__label email" for="email" >E-mail</label></div>
                         <div class="campo2"><input class="campo__field email-field" type="email" placeholder="Tu Email"
                                 id="email"></div>
                         <div class="campo1"><label class="campo__label contraseña" for="password">Contraseña</label>
                         </div>
                         <div class="campo2"><input class="campo__field contraseña-field" type="password"
                                 placeholder="Tu contraseña" id="password"></div>
-                        <div class="campo3"><button type="button" class="btn btn-outline-success" id="registro"><a href="inventario.html">Registrarse</a></button>
+                        <div class="campo3"><button type="button" class="btn btn-outline-success" id="registro"><a href="registro.html">Registrarse</a></button>
                         </div>
                         
                         <div class="campo4"><button type="button" class="btn btn-outline-info" id="iniciar"> Iniciar sesion</button>
@@ -74,7 +74,8 @@
 
         document.addEventListener('DOMContentLoaded', () => {
             const btnGoogle = document.getElementById('regGoogle');
-        
+            const emailInput = document.getElementById('email');
+            const passwordInput = document.getElementById('password');
             const authForm = document.getElementById('formulario-registro');
             const inicio=document.getElementById('iniciar');
             // Iniciar sesion email
@@ -88,7 +89,7 @@
                         const user = userCredential.user;
                         console.log('Usuario ingresado:', user);
                         // Redirigir a pacientes.html
-                        window.location.href = 'pacientes.html';
+                        window.location.href = 'inventario.html';
                     })
                     .catch((error) => {
                     });
