@@ -193,6 +193,27 @@ a {
     color: var(--blanco);
 }
 
+#regGoogle{
+    border: .1rem solid var(--gris);
+    display: block;
+    font-weight: 700;
+    font-size: 1.5rem;
+    padding: 1rem 3rem;
+    margin-bottom: 2rem;
+    border-radius: 2rem;
+
+}
+#registro{
+    border: .1rem solid var(--gris);
+    display: block;
+    font-weight: 700;
+    font-size: 1.5rem;
+    padding: 1rem 3rem;
+    margin-bottom: 2rem;
+    
+    border-radius: 2rem;
+}
+
 /* Registro */
 
 .fondo--registro {
@@ -211,16 +232,6 @@ a {
         'boton1 boton2';
 }
 
-#regGoogle{
-    border: .1rem solid var(--gris);
-    display: block;
-    font-weight: 700;
-    font-size: 1.5rem;
-    padding: 1rem 3rem;
-    margin-bottom: 2rem;
-    border-radius: 2rem;
-
-}
 .registro__field {
     border: none;
     border-bottom: .2rem solid var(--blanco);
