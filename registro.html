@@ -39,19 +39,23 @@
 
 
             <div class="campoIzq contraseña1">
-              <input class="registro__field contraseña-field" type="password" placeholder="Contraseña" id="contraseña1">
+              <input class="registro__field contraseña-field" type="password" placeholder="Contraseña" id="password">
             </div>
 
 
             <div class="campoIzq boton1">
-              <button type="button" class="btn btn-outline-info" id="iniciar"> Iniciar sesion</button>
+              <button type="button" class="btn btn-outline-info" id="iniciar"> <a href="index.html"> Iniciar sesion</a></button>
             </div>
 
             <div class="campoDer boton2">
               <button type="button" class="btn btn-outline-success" id="registro" >Registrarse</button>
             </div>
 
+
           </form>
+          <br>
+          <div class="campo2 text-center"><button id="regGoogle" type="button" class="btn btn-outline-danger"><img src="https://cdn-icons-png.flaticon.com/512/300/300221.png" alt="" width="20" height="20"> &nbsp; Registrarse con google</button></div>
+
 
         </div>
       </main>
@@ -86,15 +90,15 @@
     document.addEventListener('DOMContentLoaded', () => {
         const authForm = document.getElementById('formulario-registro');
         const emailInput = document.getElementById('email');
-        const passwordInput = document.getElementById('contraseña1');
+        const passwordInput = document.getElementById('password');
         const registrar = document.getElementById('registro');
          // Registrar sesion email
-         registro.addEventListener('click', (e) => {
+         registrar.addEventListener('click', (e) => {
                 e.preventDefault();
                 const email = emailInput.value;
-                const contraseña = passwordInput.value;
+                const contra = passwordInput.value;
 
-                createUserWithEmailAndPassword(auth, email, contraseña)
+                createUserWithEmailAndPassword(auth, email, contra)
                     .then((userCredential) => {
                         const user = userCredential.user;
                         console.log('Usuario registrado:', user);
