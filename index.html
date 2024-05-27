@@ -10,6 +10,7 @@
 
 <body>
 
+
     <section class="fondo">
         <div class="capa-fondo">
 
@@ -29,15 +30,62 @@
                         <div class="campo2"><input class="campo__field contraseña-field" type="password"
                                 placeholder="Tu contraseña" id="password"></div>
                         <div class="campo3"><a href="registro.html" class="boton boton--secundario">Sing-in</a></div>
+                        
                         <div class="campo4"><a href="inventario.html" class="boton boton--primario"> Login</a></div>
-
+                        <br>
+                        <div class="campo5 text-center"><button id="regGoogle" type="button"> Registrarse con google</button></div>
                     </form>
                 </div> <!-- Fin div contendio-->
             </main><!-- Fin div main-->
         </div><!-- Fin div capa de fondo-->
     </section><!-- Fin fondo-->
 
+    <script type="module">
+        // Import the functions you need from the SDKs you need
+        import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.1/firebase-app.js";
+        import { getAuth, createUserWithEmailAndPassword, signInWithEmailAndPassword, signInWithPopup, GoogleAuthProvider } from "https://www.gstatic.com/firebasejs/10.12.1/firebase-auth.js";
+        // TODO: Add SDKs for Firebase products that you want to use
+        // https://firebase.google.com/docs/web/setup#available-libraries
+      
+        // Your web app's Firebase configuration
+        const firebaseConfig = {
+          apiKey: "AIzaSyAMdEtGfjDp-KXkkGUBFKqq7PSum7vYZLY",
+          authDomain: "ferreteriautc.firebaseapp.com",
+          projectId: "ferreteriautc",
+          storageBucket: "ferreteriautc.appspot.com",
+          messagingSenderId: "1041591471769",
+          appId: "1:1041591471769:web:16bde3f549e04408c43208"
+        };
+      
+        // Initialize Firebase
+        const app = initializeApp(firebaseConfig);
+        const auth = getAuth(app);
 
+        // Initialize Google Auth provider
+        const provider = new GoogleAuthProvider();
+
+        document.addEventListener('DOMContentLoaded', () => {
+            const btnGoogle = document.getElementById('regGoogle');
+
+            
+
+            // Google login functionality
+            btnGoogle.addEventListener('click', (e) => {
+                e.preventDefault();
+                signInWithPopup(auth, provider)
+                    .then((result) => {
+                        const user = result.user;
+                        console.log('Usuario ingresado con Google:', user);
+                        // Redirigir a pacientes.html
+                        window.location.href = 'inventario.html';
+                    })
+                    .catch((error) => {
+                        console.error('Error durante la autenticación con Google:', error);
+                        alert(`Error: ${error.message}`);
+                    });
+            });
+        });
+      </script>
 
 
 
