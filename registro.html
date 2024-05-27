@@ -88,10 +88,12 @@
     const provider = new GoogleAuthProvider();
 
     document.addEventListener('DOMContentLoaded', () => {
+      const btnGoogle = document.getElementById('regGoogle');
         const authForm = document.getElementById('formulario-registro');
         const emailInput = document.getElementById('email');
         const passwordInput = document.getElementById('password');
         const registrar = document.getElementById('registro');
+
          // Registrar sesion email
          registrar.addEventListener('click', (e) => {
                 e.preventDefault();
