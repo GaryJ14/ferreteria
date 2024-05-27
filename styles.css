@@ -157,40 +157,15 @@ a {
 
 
 /* Boton */
-.boton {
+
+#iniciar{
+    border: .1rem solid var(--gris);
     display: block;
-    font-family: var(--fuenteHeadings);
-    color: var(--negro);
-    background: var(--blanco);
-    text-align: center;
     font-weight: 700;
-    text-transform: uppercase;
     font-size: 1.5rem;
     padding: 1rem 3rem;
     margin-bottom: 2rem;
-    border: none;
     border-radius: 2rem;
-}
-
-@media (min-width: 768px) {
-    .boton {
-        display: inline-block;
-    }
-}
-
-.boton:hover {
-    cursor: pointer;
-}
-
-.boton--primario {
-    background-color: var(--blanco);
-    color: var(--negro);
-}
-
-.boton--secundario {
-    background-color: transparent;
-    border: .1rem solid var(--gris);
-    color: var(--blanco);
 }
 
 #regGoogle{

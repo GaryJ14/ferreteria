@@ -33,9 +33,11 @@
                         </div>
                         <div class="campo2"><input class="campo__field contraseña-field" type="password"
                                 placeholder="Tu contraseña" id="password"></div>
-                        <div class="campo3"><a href="registro.html" class="boton boton--secundario">Sing-in</a></div>
+                        <div class="campo3"><button type="button" class="btn btn-outline-success" id="registro" >Registrarse</button>
+                        </div>
                         
-                        <div class="campo4"><a href="inventario.html" class="boton boton--primario"> Login</a></div>
+                        <div class="campo4"><button type="button" class="btn btn-outline-info" id="iniciar"> Iniciar sesion</button>
+                        </div>
                         <br>
                         <div class="campo2 text-center"><button id="regGoogle" type="button" class="btn btn-outline-danger"><img src="https://cdn-icons-png.flaticon.com/512/300/300221.png" alt="" width="20" height="20"> &nbsp; Registrarse con google</button></div>
 
@@ -72,7 +74,25 @@
 
         document.addEventListener('DOMContentLoaded', () => {
             const btnGoogle = document.getElementById('regGoogle');
+        
+            const authForm = document.getElementById('formulario-registro');
+            const inicio=document.getElementById('iniciar');
+            // Iniciar sesion email
+         iniciar.addEventListener('click', (e) => {
+                e.preventDefault();
+                const email = emailInput.value;
+                const password = passwordInput.value;
 
+                signInWithEmailAndPassword(auth, email , password)
+                    .then((userCredential) => {
+                        const user = userCredential.user;
+                        console.log('Usuario ingresado:', user);
+                        // Redirigir a pacientes.html
+                        window.location.href = 'pacientes.html';
+                    })
+                    .catch((error) => {
+                    });
+            });
             
 
             // Google login functionality
